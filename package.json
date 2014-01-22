@@ -1,6 +1,6 @@
 {
     "license": "MPL 2.0",
-    "version": "0.1",
+    "version": "1.0",
     "description": "Torrent creation module for FireBit that can be packaged and ran as a separate extension.",
     "contributors": [],
     "keywords": [ "torrentcreator", "torrent", "creator", "firebit", "torrent-creator"],
