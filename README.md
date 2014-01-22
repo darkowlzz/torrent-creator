@@ -66,24 +66,89 @@ You will need to list _torrent-creator_ as a dependency. Below is an example add
 
 ###Require Library
 ```javascript
-    const { promptUser } = require('torrent-creator/creator');
+    const { Torrent, promptUser } = require('torrent-creator/creator');
+    
     function progress(aStatus, aProgress, aProgressMax) {
         console.log(aProgress + ' of ' + aProgressMax, 'Status: ' + aStatus);
     }
+    
     function callback(torrent, error) {
         if (error) {
             console.log(error.message);
             console.log('Torrent creation failed.');
         } else {
             console.log('Torrent created successfully!');
-            let file = torrent.saveToFile();
-            console.log('\n\nSaved torrent: "' + file.path + '"\n', torrent);
+            // torrent.saveToFile(); || torrent.saveToFile('C:\\test.torrent'); || torrent.saveToFile(nsIFile);
+            let file = torrent.saveToFile('C:\\');
+            // file.path === 'C:\\' + torrent.info.name + '.torrent'
+            console.log('\n\nSaved torrent: "' + file.path + '"\n', torrent); 
             console.log('Opening torrent: ' + torrent.getHash());
             file.launch();
         }
     }
-
+    
+    /*
+     * Syntax:
+     *
+     *  All arguments are optional. Use of one does not require another.
+     *
+     *  promptUser(title, callback, progress, notifyOnAbort);
+     *  promptUser(title, modeGetFolder, callback, progress, notifyOnAbort);
+     *  promptUser(title, callback, modeGetFolder, progress, notifyOnAbort);
+     *  promptUser(title, callback, progress, modeGetFolder, notifyOnAbort);
+     *
+     *  Warning: If progress(Function) argument is listed before the callback(Function)
+     *  argument then their roles will be reversed.
+     *  |
+     *  v
+     *  Do not do this: promptUser(title, progress, callback);
+     *
+     *  @Param: modeGetFolder(Boolean)
+     *  @Param: notifyOnAbort(Boolean)
+     */
+     
     promptUser('Select File', callback, progress, false, true);
+    //promptUser('Select Directory', callback, progress, true, true);
+
+    /*
+     * Syntax:
+     *
+     *  All arguments except path are optional. Use of one does not require another.
+     *  The "file" argument may be a file path or nsIFile instance.
+     *
+     *  createTorrent(file, callback, progress);
+     *  createTorrent(file, pieceSize, callback, progress);
+     *  createTorrent(file, callback, pieceSize, progress);
+     *  createTorrent(file, callback, progress, pieceSize);
+     *
+     *  Warning: If progress(Function) argument is listed before the callback(Function)
+     *  argument then their roles will be reversed. 
+     *  |
+     *  v
+     *  Do not do this: createTorrent(file, progress, callback);
+     *
+     *  @Param: pieceLength(Number)
+     */
+     createTorrent('C:\\video.mp4', pieceSize, callback, progress);
+     createTorrent('C:\\Documents and Settings\\New Folder', callback, progress);
+     
+     
+     // For more examples see lib/creator.js
+     
+     let torrent = new Torrent({ // You can specify 'piece length', etc. here
+        'announce-list': ['http://torrenttracker:8080'],
+        'info': {
+            'name': 'archive.7z'
+        }
+     });
+     
+     torrent.info.length = 54654561;
+     //torrent.info.files = [...]
+     torrent.updateFromFile(path, callback, progress);
+     
+     // bencoded torrent meta data === torrent.toString()
+     
+
 ```
 
 
