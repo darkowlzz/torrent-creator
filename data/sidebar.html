@@ -4,12 +4,28 @@
         <meta name="application-name" content="Torrent Creator" />
         <meta name="description" content="Add-on Sidebar" />
         <meta name="author" content="Rodney Teal" />
+        <meta name="copyright" content="&#x00a9; 2014 Rodney Teal" />
         <meta charset="UTF-8" />
         <link type="text/css" href="sidebar.css" rel="stylesheet" />
         <script type="text/javascript" src="sidebar.js"></script>
         <title>Torrent Creator</title>
     </head>
     <body>
-
+        <form id="torrent-options" spellcheck="false">
+            <label id="label-mode" for="single-mode">Source:</label>
+            <div id="radio-mode" title="Change file picker mode. This option can safely be ignored.">
+                <input type="radio" id="single-mode" />File
+                <input type="radio" id="multi-mode" />Folder
+            </div>
+            <br />
+            <input id="input-source" placeholder="Drag &amp; Drop Source" type="text" 
+                   title="Select the torrent source. This can be a File or URL." />
+            <img id="select-source" src="images/new%20file%2024.png" title="Browse for file." />
+            <br />
+            <fieldset id="fieldset-trackers">
+                <legend>Trackers</legend>
+                <textarea id="textarea-trackers" rows="4" cols="20" title='Tracker List' wrap="off"></textarea>
+           </fieldset>
+        </form>
     </body>
 </html>

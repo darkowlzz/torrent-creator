@@ -1,0 +1,39 @@
+#radio-mode, #label-mode {
+    float: left;
+}
+
+#radio-mode {
+    margin-bottom: 1px;
+}
+
+#single-mode {
+    float: none;
+    margin-left: 5px;
+}
+
+#source {
+    vertical-align: middle;
+}
+
+#input-source {
+    width: 147px;
+    border: 2px dashed #999;
+}
+
+#select-source {
+    vertical-align: middle;
+    cursor: pointer;
+    margin-left: 0px;
+    margin-top: -3px;
+}
+
+#fieldset-trackers {
+    margin-top: 10px;
+    width: 25%;
+    padding: 3px;
+}
+
+#textarea-trackers {
+    border: none;
+    overflow: hidden;
+}
