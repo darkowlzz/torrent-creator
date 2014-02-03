@@ -1,3 +1,8 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 * { margin: 0 !important; padding: 0 !important; }
 html, body { height: 100% !important; }
 
@@ -9,16 +14,19 @@ form {
 }
 
 /* Torrent Mode Selection */
+#mode { width: 175px !important; }
 #mode > label, #mode > div { float: left !important; }
 #mode > div { margin-bottom: 1px !important; }
-#mode > div:first-child { float: none !important; margin-left: 5px !important; }
+#mode > div { margin: auto; padding: initial; }
+#mode > div > input:first-of-type { float: none !important; margin-left: 5px !important; }
 
 /* Torrent Source Input */
+#source, #buttons, #checkboxes { width: 175px !important; }
 #source > input { width: 143px !important; border: 2px dashed #999 !important; }
 #source > input:focus:invalid { color: red !important; }
 #source > input:valid { box-shadow:0 0 2px green !important; }
 #source > img {
-    margin-top: -3px;
+    margin-top: -3px !important;
     vertical-align: middle !important;
     cursor: pointer !important;
 }
@@ -29,16 +37,60 @@ fieldset {
 }
 textarea { border: none !important; overflow: hidden !important; }
 
+.checkbox {display: inline !important;}
+
+#save-defaults { margin-left: 6px !important; }
+
+/* This is supposed to help display placeholders correctly on mobile devices. */
 :-moz-placeholder { text-overflow: ellipsis !important; } /* Mozilla Firefox 4 to 18 */
 ::-moz-placeholder { text-overflow: ellipsis !important; } /* Mozilla Firefox 19+ */
 
 .option-label:-moz-placeholder { color: #000 !important; opacity: 1 !important; }
 .option-label::-moz-placeholder { color: #000 !important; opacity: 1 !important; }
-
 .option-label, .option-input { width: 168px !important; }
 
 .checkmark {
-    background: url(images/checkmark%2016.png) no-repeat scroll 152px 2px !important;
+    background: url(images/checkmark%2016.png) no-repeat scroll 152px 1px !important;
 }
 
-.spacer { width: 100% !important; height: 2% !important; }
+.spacer { width: 100% !important; height: 2% !important; max-height:10px !important; }
+
+.button {
+    box-shadow: inset 0px 1px 0px 0px #caefab !important;
+    background: -moz-linear-gradient( center top, #77d42a 5%, #5cb811 100% ) !important;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#77d42a', endColorstr='#5cb811') !important;
+    background-color: #77d42a !important;
+    /* border-top-left-radius: 20px !important; */
+    /* border-top-right-radius: 20px !important; */
+    /* border-bottom-right-radius: 20px !important; */
+    /* border-bottom-left-radius: 20px !important; */
+    text-indent: 0 !important;
+    border: 1px solid #268a16 !important;
+    display: inline-block !important;
+    color: #384a29 !important;
+    font-family: Arial !important;
+    font-size: 13px !important;
+    font-weight: bold !important;
+    font-style: normal !important;
+    height: 20px !important;
+    line-height: 20px !important;
+    width: 64px !important;
+    text-decoration: none !important;
+    text-align: center !important;
+    text-shadow: 1px 1px 0px #aade7c !important;
+}
+.button:focus { outline: none !important; }
+.button:hover {
+	background: -moz-linear-gradient( center top, #5cb811 5%, #77d42a 100% ) !important;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5cb811', endColorstr='#77d42a') !important;
+	background-color: #5cb811 !important;
+}
+.button:active { position: relative !important; top: 1px !important; }
+
+#button-create { margin-left: 10px !important; }
+#button-saveAs { margin-left: 5px !important; width: 74px !important; }
+
+#history > span {
+    border: none;
+    border-bottom: 1px solid #000;
+}

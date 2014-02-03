@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<!--
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta name="application-name" content="Torrent Creator" />
@@ -17,15 +22,18 @@
             <div id="mode" title="Change file picker mode. This option can safely be ignored.">
                 <label for="single">Source:</label>
                 <div>
-                    <input type="radio" id="single" />File
-                    <input type="radio" id="multi" />Folder
+                    <input type="radio" id="single" accesskey="f" />&nbsp;File
+                    <input type="radio" id="multi" accesskey="o" />&nbsp;Folder
                 </div>
             </div>
 
 <!--source-->
             <div id="source">
-                <input placeholder="Drag &amp; Drop Source" type="url" required="required"
-                       title="Select the torrent source. This can be a File or URL." />
+                <!--Ugly hack to center placeholder-->
+                <input placeholder="           Drag &amp; Drop"
+                       type="url" required="required"
+                       title="Select the torrent source. This can be a File or URL."
+                       x-moz-errormessage="Enter a valid URL" accesskey="s" />
                 <img src="images/new%20file%2024.png" title="Browse for file." />
             </div>
 
@@ -34,7 +42,7 @@
 <!--trackers-->
             <fieldset id="trackers" title="UDP and HTTP Tracker List">
                 <legend>Trackers</legend>
-                <textarea rows="4" cols="20" wrap="off"></textarea>
+                <textarea rows="4" cols="20" wrap="off" accesskey="t"></textarea>
             </fieldset>
 
             <div class="spacer"></div>
@@ -42,22 +50,38 @@
 <!--webseeds-->
             <fieldset id="webseeds" title="HTTP Mirrors">
                 <legend>Web Seeds</legend>
-                <textarea rows="4" cols="20" wrap="off"></textarea>
+                <textarea rows="4" cols="20" wrap="off" accesskey="w" ></textarea>
             </fieldset>
+
+            <div class="spacer"></div>
+
+<!--private-->
+            <div id="checkboxes">
+                <div class="checkbox" title="Mark this torrent as private">
+                    <input id="private" accesskey="p" type="checkbox" />&nbsp;Private
+                </div>
+
+<!--save as defaults-->
+                <div class="checkbox" title="Remember these options">
+                    <input id="save-defaults" accesskey="d" type="checkbox" />&nbsp;Save Defaults
+                </div>
+            </div>
 
             <div class="spacer"></div>
 
 <!--comment-->
             <div id="comment" title="Comment on this torrent.">
-                <input class="option-label" placeholder="Comment" type="text" />
+                <input class="option-label" placeholder="Comment" type="text" 
+                       accesskey="m" />
                 <input class="option-input" placeholder="Comment" type="text" />
             </div>
 
             <div class="spacer"></div>
 
 <!--piece length-->
-            <div id="piece-length" title="set the torrent piece length in bytes.">
-                <input class="option-label" placeholder="Piece Length" type="text" />
+            <div id="piece-length" title="Set the torrent piece length in bytes.">
+                <input class="option-label" placeholder="Piece Length" type="text"
+                       accesskey="l" />
                 <input class="option-input" placeholder="Piece Length" type="text" />
             </div>
 
@@ -65,7 +89,8 @@
 
 <!--name-->
             <div id="name" title="Set the torrent info name.">
-                <input class="option-label" placeholder="Name" type="text" />
+                <input class="option-label" placeholder="Name" type="text"
+                       accesskey="n" />
                 <input class="option-input" placeholder="Name" type="text" />
             </div>
 
@@ -73,7 +98,8 @@
 
 <!--created by-->
             <div id="created-by" title="Your name">
-                <input class="option-label" placeholder="Created By" type="text" />
+                <input class="option-label" placeholder="Created By" type="text"
+                       accesskey="b" />
                 <input class="option-input" placeholder="Created By" type="text" />
             </div>
 
@@ -81,21 +107,35 @@
 
 <!--creation date-->
             <div id="creation-date" title="Set the creation date.">
-                <input class="option-label" placeholder="Creation Date" type="text" />
+                <input class="option-label" placeholder="Creation Date" type="text"
+                       accesskey="d" />
                 <input class="option-input" placeholder="Creation Date" type="text" />
             </div>
 
             <div class="spacer"></div>
 
-<!--private-->
-            <div id="private" title="Mark this torrent private.">
-                <input class="option-label" placeholder="Private" type="text" />
-                <input class="option-input" placeholder="Private" type="text" />
+<!--create button-->
+            <div id="buttons">
+                <a href="#" id="button-create" class="button" accesskey="c"
+                   title="Start hashing the file(s)">Create</a>
+
+<!--save as button-->
+                <a href="#" id="button-saveAs" class="button" accesskey="a"
+                   title="Optionally select the destination file.
+The default is the info name created in the default download directory">Save As</a>
             </div>
 
             <div class="spacer"></div>
 
-            <input id="button-create" type="button" value="Create" title="Start hashing the file(s)" />
+<!--recent torrents-->
+            <div id="history">
+                <span>Recent Torrents</span>
+                <a href="#" accesskey="h"></a>
+                <a href="#"></a>
+                <a href="#"></a>
+                <a href="#"></a>
+                <a href="#"></a>
+            </div>
         </form>
     </body>
 </html>
