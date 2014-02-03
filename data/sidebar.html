@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'>
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta name="application-name" content="Torrent Creator" />
         <meta name="description" content="Add-on Sidebar" />
@@ -11,21 +11,91 @@
         <title>Torrent Creator</title>
     </head>
     <body>
-        <form id="torrent-options" spellcheck="false">
-            <label id="label-mode" for="single-mode">Source:</label>
-            <div id="radio-mode" title="Change file picker mode. This option can safely be ignored.">
-                <input type="radio" id="single-mode" />File
-                <input type="radio" id="multi-mode" />Folder
+        <form spellcheck="false" autocomplete="on">
+            
+<!--mode-->
+            <div id="mode" title="Change file picker mode. This option can safely be ignored.">
+                <label for="single">Source:</label>
+                <div>
+                    <input type="radio" id="single" />File
+                    <input type="radio" id="multi" />Folder
+                </div>
             </div>
-            <br />
-            <input id="input-source" placeholder="Drag &amp; Drop Source" type="text" 
-                   title="Select the torrent source. This can be a File or URL." />
-            <img id="select-source" src="images/new%20file%2024.png" title="Browse for file." />
-            <br />
-            <fieldset id="fieldset-trackers">
+
+<!--source-->
+            <div id="source">
+                <input placeholder="Drag &amp; Drop Source" type="url" required="required"
+                       title="Select the torrent source. This can be a File or URL." />
+                <img src="images/new%20file%2024.png" title="Browse for file." />
+            </div>
+
+            <div class="spacer"></div>
+
+<!--trackers-->
+            <fieldset id="trackers" title="UDP and HTTP Tracker List">
                 <legend>Trackers</legend>
-                <textarea id="textarea-trackers" rows="4" cols="20" title='Tracker List' wrap="off"></textarea>
-           </fieldset>
+                <textarea rows="4" cols="20" wrap="off"></textarea>
+            </fieldset>
+
+            <div class="spacer"></div>
+
+<!--webseeds-->
+            <fieldset id="webseeds" title="HTTP Mirrors">
+                <legend>Web Seeds</legend>
+                <textarea rows="4" cols="20" wrap="off"></textarea>
+            </fieldset>
+
+            <div class="spacer"></div>
+
+<!--comment-->
+            <div id="comment" title="Comment on this torrent.">
+                <input class="option-label" placeholder="Comment" type="text" />
+                <input class="option-input" placeholder="Comment" type="text" />
+            </div>
+
+            <div class="spacer"></div>
+
+<!--piece length-->
+            <div id="piece-length" title="set the torrent piece length in bytes.">
+                <input class="option-label" placeholder="Piece Length" type="text" />
+                <input class="option-input" placeholder="Piece Length" type="text" />
+            </div>
+
+            <div class="spacer"></div>
+
+<!--name-->
+            <div id="name" title="Set the torrent info name.">
+                <input class="option-label" placeholder="Name" type="text" />
+                <input class="option-input" placeholder="Name" type="text" />
+            </div>
+
+            <div class="spacer"></div>
+
+<!--created by-->
+            <div id="created-by" title="Your name">
+                <input class="option-label" placeholder="Created By" type="text" />
+                <input class="option-input" placeholder="Created By" type="text" />
+            </div>
+
+            <div class="spacer"></div>
+
+<!--creation date-->
+            <div id="creation-date" title="Set the creation date.">
+                <input class="option-label" placeholder="Creation Date" type="text" />
+                <input class="option-input" placeholder="Creation Date" type="text" />
+            </div>
+
+            <div class="spacer"></div>
+
+<!--private-->
+            <div id="private" title="Mark this torrent private.">
+                <input class="option-label" placeholder="Private" type="text" />
+                <input class="option-input" placeholder="Private" type="text" />
+            </div>
+
+            <div class="spacer"></div>
+
+            <input id="button-create" type="button" value="Create" title="Start hashing the file(s)" />
         </form>
     </body>
 </html>

@@ -1,39 +1,44 @@
-#radio-mode, #label-mode {
-    float: left;
+* { margin: 0 !important; padding: 0 !important; }
+html, body { height: 100% !important; }
+
+form {
+  min-height: 99% !important;
+  height: auto !important; /*min-height hack*/
+  height: 99% !important;
+  padding: 5px 0 0 5px !important;
 }
 
-#radio-mode {
-    margin-bottom: 1px;
-}
+/* Torrent Mode Selection */
+#mode > label, #mode > div { float: left !important; }
+#mode > div { margin-bottom: 1px !important; }
+#mode > div:first-child { float: none !important; margin-left: 5px !important; }
 
-#single-mode {
-    float: none;
-    margin-left: 5px;
-}
-
-#source {
-    vertical-align: middle;
-}
-
-#input-source {
-    width: 147px;
-    border: 2px dashed #999;
-}
-
-#select-source {
-    vertical-align: middle;
-    cursor: pointer;
-    margin-left: 0px;
+/* Torrent Source Input */
+#source > input { width: 143px !important; border: 2px dashed #999 !important; }
+#source > input:focus:invalid { color: red !important; }
+#source > input:valid { box-shadow:0 0 2px green !important; }
+#source > img {
     margin-top: -3px;
+    vertical-align: middle !important;
+    cursor: pointer !important;
 }
 
-#fieldset-trackers {
-    margin-top: 10px;
-    width: 25%;
-    padding: 3px;
+fieldset {
+    width: 25% !important;
+    padding: 3px !important;
+}
+textarea { border: none !important; overflow: hidden !important; }
+
+:-moz-placeholder { text-overflow: ellipsis !important; } /* Mozilla Firefox 4 to 18 */
+::-moz-placeholder { text-overflow: ellipsis !important; } /* Mozilla Firefox 19+ */
+
+.option-label:-moz-placeholder { color: #000 !important; opacity: 1 !important; }
+.option-label::-moz-placeholder { color: #000 !important; opacity: 1 !important; }
+
+.option-label, .option-input { width: 168px !important; }
+
+.checkmark {
+    background: url(images/checkmark%2016.png) no-repeat scroll 152px 2px !important;
 }
 
-#textarea-trackers {
-    border: none;
-    overflow: hidden;
-}
+.spacer { width: 100% !important; height: 2% !important; }
