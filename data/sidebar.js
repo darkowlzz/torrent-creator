@@ -24,8 +24,10 @@ window.addEventListener('load', event => {
     window.addEventListener('dragenter', event => event.preventDefault());
     window.addEventListener('dragover', event => event.preventDefault());
     // On drop set the source input value and set the mode
-    window.addEventListener('drop', event =>
-            getType(source.value = event.dataTransfer.getData('text/x-moz-url')));
+    window.addEventListener('drop', event => {
+        var value = event.dataTransfer.getData('text/x-moz-url');
+        getType(source.value = value.split('\n')[0]);
+    });
 
     // Single or multiple file torrent mode selection
     const multiMode = document.querySelector('#multi');
@@ -48,6 +50,12 @@ window.addEventListener('load', event => {
 
     // On click invoke nsIFilePicker
     listenFor('#source > img', 'click', event => selectSource(multiMode.checked));
+
+    // Text areas
+    const trackers = document.querySelector('#trackers > textarea');
+    trackers.addEventListener('blur', event => trackers.scrollLeft = trackers.scrollTop = 0);
+    const webSeeds = document.querySelector('#web-seeds > textarea');
+    webSeeds.addEventListener('blur', event => webSeeds.scrollLeft = webSeeds.scrollTop = 0);
 
     // Helper functions
     const hide = (...elements) => elements.forEach(element =>
@@ -125,7 +133,23 @@ window.addEventListener('load', event => {
     // On click emit the create event to main with the source and prototype arguments
     listenFor('#button-create', 'click', event => {
         if (source.validity.valid) {
-            var prototype = {info:{}};
+            var prototype = {info:{}}, urlList;
+            if (trackers.value) {
+                urlList = [];
+                trackers.value.split(/\s/).filter(value => !!value).
+                        forEach(url => urlList.push([url]));
+                if (urlList.length) {
+                    prototype['announce-list'] = urlList;
+                    prototype['announce'] = urlList[0];
+                }
+            }
+            if (webSeeds.value) {
+                urlList = [];
+                webSeeds.value.split(/\s/).filter(value => !!value).
+                        forEach(url => urlList.push([url]));
+                if (urlList.length)
+                    prototype['url-list'] = urlList;
+            }
             if (comment.value)
                 prototype['comment'] = comment.value;
             if (creationDate.value)
