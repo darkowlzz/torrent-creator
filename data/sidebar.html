@@ -3,6 +3,10 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * Help information in element titles are constructed from
+ * documentation: https://wiki.theory.org/BitTorrentSpecification
+ * which is licensed under the Creative Commons Attribution 3.0
 -->
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -32,7 +36,7 @@
                 <!--Ugly hack to center placeholder-->
                 <input placeholder="           Drag &amp; Drop"
                        type="url" required="required"
-                       title="Select the torrent source. This can be a File or URL."
+                       title="Select the torrent source. This can be a local or remote file URL."
                        x-moz-errormessage="Enter a valid URL" accesskey="s" />
                 <img src="images/new%20file%2024.png" title="Browse for file." />
             </div>
@@ -40,7 +44,7 @@
             <div class="spacer"></div>
 
 <!--trackers-->
-            <fieldset id="trackers" title="UDP and HTTP Tracker List">
+            <fieldset id="trackers" title="(optional) UDP and HTTP Tracker List - separated by space">
                 <legend>Trackers</legend>
                 <textarea rows="4" cols="20" wrap="off" accesskey="t"></textarea>
             </fieldset>
@@ -48,7 +52,7 @@
             <div class="spacer"></div>
 
 <!--webseeds-->
-            <fieldset id="web-seeds" title="HTTP Mirrors">
+            <fieldset id="web-seeds" title="(optional) HTTP Mirrors - separated by space">
                 <legend>Web Seeds</legend>
                 <textarea rows="4" cols="20" wrap="off" accesskey="w" ></textarea>
             </fieldset>
@@ -57,12 +61,14 @@
 
 <!--private-->
             <div id="checkboxes">
-                <div class="checkbox" title="Mark this torrent as private">
+                <div class="checkbox" title="If checked the client MUST publish its presence to get
+other peers ONLY via the trackers explicitly described above.
+If your unsure then leave this unchecked.">
                     <input id="private" accesskey="p" type="checkbox" />&nbsp;Private
                 </div>
 
 <!--save as defaults-->
-                <div class="checkbox" title="Remember these options">
+                <div class="checkbox" title="Remember these options between browsing sessions.">
                     <input id="save-defaults" accesskey="d" type="checkbox" />&nbsp;Save Defaults
                 </div>
             </div>
@@ -70,7 +76,7 @@
             <div class="spacer"></div>
 
 <!--comment-->
-            <div id="comment" title="Comment on this torrent.">
+            <div id="comment" title=" (optional) Free-form textual comments of the author.">
                 <input class="option-label" placeholder="Comment" type="text" 
                        accesskey="m" />
                 <input class="option-input" placeholder="Comment" type="text" />
@@ -79,7 +85,9 @@
             <div class="spacer"></div>
 
 <!--piece length-->
-            <div id="piece-length" title="Set the torrent piece length in bytes.">
+            <div id="piece-length" title="(optional) Set the number of bytes in each piece (integer).
+The following traditional byte unit symbols are allowed(case insensitive):
+    b(byte), kb(kilobyte), mb(megabyte) i.e. 256 KB">
                 <input class="option-label" placeholder="Piece Length" type="text"
                        accesskey="l" />
                 <input class="option-input" placeholder="Piece Length" type="text" />
@@ -88,7 +96,8 @@
             <div class="spacer"></div>
 
 <!--name-->
-            <div id="name" title="Set the torrent info name.">
+            <div id="name" title="(optional) The file path of the directory in which to store all the files.
+This is purely advisory.">
                 <input class="option-label" placeholder="Name" type="text"
                        accesskey="n" />
                 <input class="option-input" placeholder="Name" type="text" />
@@ -97,7 +106,7 @@
             <div class="spacer"></div>
 
 <!--created by-->
-            <div id="created-by" title="Your name">
+            <div id="created-by" title="(optional) name and version of the program used to create the .torrent">
                 <input class="option-label" placeholder="Created By" type="text"
                        accesskey="b" />
                 <input class="option-input" placeholder="Created By" type="text" />
@@ -106,7 +115,7 @@
             <div class="spacer"></div>
 
 <!--creation date-->
-            <div id="creation-date" title="Set the creation date.">
+            <div id="creation-date" title="(optional) the creation time of the torrent">
                 <input class="option-label" placeholder="Creation Date" type="text"
                        accesskey="d" />
                 <input class="option-input" placeholder="Creation Date" type="text" />
