@@ -6,23 +6,30 @@
 'use strict';
 
 const notify = (title, text) => addon.port.emit('alert', title, text);
+const getType = fileURL => addon.port.emit('get-type', fileURL);
+const selectSource = mode => addon.port.emit('select-source', mode);
+const saveAs = (url) => addon.port.emit('save-as', url);
+const create = (source, prototype, path) =>
+        addon.port.emit('create', source, prototype, path);
+const recieve = (...args) => addon.port.on.apply(addon.port, args);
+const listenFor = (selector, event, handler, capture) =>
+        document.querySelector(selector).addEventListener(event, handler, capture);
 
 window.addEventListener('load', event => {
     // Select source on click.
     const source = document.querySelector('#source > input');
     source.addEventListener('focus', event => source.select());
-
+    var savePath = '';
     // Drag and drop source
     window.addEventListener('dragenter', event => event.preventDefault());
     window.addEventListener('dragover', event => event.preventDefault());
     // On drop set the source input value and set the mode
     window.addEventListener('drop', event =>
-            addon.port.emit('get-type',
-            source.value = event.dataTransfer.getData('text/x-moz-url')));
+            getType(source.value = event.dataTransfer.getData('text/x-moz-url')));
 
     // Single or multiple file torrent mode selection
-    const multiMode = document.querySelector('#mode > div > #multi');
-    const singleMode = document.querySelector('#mode > div > #single');
+    const multiMode = document.querySelector('#multi');
+    const singleMode = document.querySelector('#single');
     // Initial mode
     singleMode.checked = true;
     // Toggle mode
@@ -30,17 +37,17 @@ window.addEventListener('load', event => {
     singleMode.addEventListener('click', event => multiMode.checked = false);
 
     // Port on fileURL result of nsIFilePicker
-    addon.port.on('source', fileURL => source.value = fileURL);
+    recieve('source', fileURL => source.value = fileURL);
+    recieve('path', path => savePath = path);
 
     // Port on result of get-type
-    addon.port.on('set-type', isDirectory => {
+    recieve('type', isDirectory => {
         singleMode.checked = !isDirectory;
         multiMode.checked = isDirectory;
     });
 
     // On click invoke nsIFilePicker
-    document.querySelector('#source > img').addEventListener('click', event =>
-            addon.port.emit('select-source', multiMode.checked));
+    listenFor('#source > img', 'click', event => selectSource(multiMode.checked));
 
     // Helper functions
     const hide = (...elements) => elements.forEach(element =>
@@ -116,7 +123,7 @@ window.addEventListener('load', event => {
     const pieceLength = getOption('piece-length');
 
     // On click emit the create event to main with the source and prototype arguments
-    document.querySelector('#button-create').addEventListener('click', event => {
+    listenFor('#button-create', 'click', event => {
         if (source.validity.valid) {
             var prototype = {info:{}};
             if (comment.value)
@@ -131,8 +138,17 @@ window.addEventListener('load', event => {
                 prototype['info']['name'] = name.value;
             if (privateOpt.checked)
                 prototype['info']['private'] = 1;
-            addon.port.emit('create', source.value, prototype);
-        } else notify('Error', 'You must enter a valid URL');
+            create(source.value, prototype, savePath);
+        } else {
+            notify('Error', 'You must enter a valid source URL');
+            source.focus();
+        }
+        event.preventDefault();
+        event.stopImmediatePropagation();
+    });
+
+    listenFor('#button-save-as', 'click', event => {
+        saveAs(name.value || source.value);
         event.preventDefault();
         event.stopImmediatePropagation();
     });
@@ -142,7 +158,6 @@ window.addEventListener('load', event => {
             element.addEventListener('mousedown', event => {
                 event.preventDefault();
                 event.stopImmediatePropagation();
-                return false;
             }));
 
 });
