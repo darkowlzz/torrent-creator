@@ -140,13 +140,11 @@ window.addEventListener('load', event => {
                         forEach(url => urlList.push([url]));
                 if (urlList.length) {
                     prototype['announce-list'] = urlList;
-                    prototype['announce'] = urlList[0];
+                    prototype['announce'] = urlList[0][0];
                 }
             }
             if (webSeeds.value) {
-                urlList = [];
-                webSeeds.value.split(/\s/).filter(value => !!value).
-                        forEach(url => urlList.push([url]));
+                urlList = webSeeds.value.split(/\s/).filter(value => !!value);
                 if (urlList.length)
                     prototype['url-list'] = urlList;
             }
