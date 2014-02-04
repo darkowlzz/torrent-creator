@@ -7,6 +7,7 @@
 
 const notify = (title, text) => addon.port.emit('alert', title, text);
 const getType = fileURL => addon.port.emit('get-type', fileURL);
+const getPrototype = () => addon.port.emit('get-prototype');
 const selectSource = mode => addon.port.emit('select-source', mode);
 const saveAs = (url) => addon.port.emit('save-as', url);
 const create = (source, prototype, path) =>
@@ -14,6 +15,23 @@ const create = (source, prototype, path) =>
 const recieve = (...args) => addon.port.on.apply(addon.port, args);
 const listenFor = (selector, event, handler, capture) =>
         document.querySelector(selector).addEventListener(event, handler, capture);
+
+const getDate = (date) => {
+    date = new Date(date || Date());
+    var dateString = date.getMonth()+1 + '/' +
+                     date.getDate() + '/' +
+                     date.getFullYear() + ' ';
+    var hours = date.getHours(), suffix = 'AM';
+    if (hours > 12) {
+        hour -= 12;
+        suffix = 'PM'
+    }
+    dateString += hours + ':' +
+            date.getMinutes() + ':' +
+            date.getSeconds() + ' ';
+    return dateString + suffix;
+};
+
 
 window.addEventListener('load', event => {
     // Select source on click.
@@ -88,6 +106,7 @@ window.addEventListener('load', event => {
                 show(this.label);
             },
             get value() this.input.value,
+            set value(value) this.input.value = value,
             mouseTrap: false
         };
         // If the focus event occurs then the mouseover listener has been removed.
@@ -129,52 +148,7 @@ window.addEventListener('load', event => {
     const createdBy = getOption('created-by');
     const creationDate = getOption('creation-date');
     const pieceLength = getOption('piece-length');
-
-    // On click emit the create event to main with the source and prototype arguments
-    listenFor('#button-create', 'click', event => {
-        if (source.validity.valid) {
-            var prototype = {info:{}}, urlList;
-            if (trackers.value) {
-                urlList = [];
-                trackers.value.split(/\s/).filter(value => !!value).
-                        forEach(url => urlList.push([url]));
-                if (urlList.length) {
-                    prototype['announce-list'] = urlList;
-                    prototype['announce'] = urlList[0][0];
-                }
-            }
-            if (webSeeds.value) {
-                urlList = webSeeds.value.split(/\s/).filter(value => !!value);
-                if (urlList.length)
-                    prototype['url-list'] = urlList;
-            }
-            if (comment.value)
-                prototype['comment'] = comment.value;
-            if (creationDate.value)
-                prototype['creation date'] = creationDate.value;
-            if (createdBy.value)
-                prototype['created by'] = createdBy.value;
-            if (pieceLength.value)
-                prototype['info']['piece length'] = pieceLength.value;
-            if (name.value)
-                prototype['info']['name'] = name.value;
-            if (privateOpt.checked)
-                prototype['info']['private'] = 1;
-            create(source.value, prototype, savePath);
-        } else {
-            notify('Error', 'You must enter a valid source URL');
-            source.focus();
-        }
-        event.preventDefault();
-        event.stopImmediatePropagation();
-    });
-
-    listenFor('#button-save-as', 'click', event => {
-        saveAs(name.value || source.value);
-        event.preventDefault();
-        event.stopImmediatePropagation();
-    });
-
+    
     // Prevent links and images from being dragged.
     colToArr(document.querySelectorAll('img, a')).forEach(element =>
             element.addEventListener('mousedown', event => {
@@ -182,4 +156,73 @@ window.addEventListener('load', event => {
                 event.stopImmediatePropagation();
             }));
 
+    getPrototype();
+    recieve('prototype', prototype => {
+
+        // Apply defaults
+        comment.value = prototype['comment'] || '';
+        name.value = prototype['name'] || '';
+        pieceLength.value = prototype['piece length'] || '';
+        privateOpt.checked = !!prototype['info']['private'];
+        createdBy.value = prototype['created by'] || '';
+        creationDate.value = getDate(prototype['creation date'] * 1000);
+
+        // On click emit the create event to main with the source and prototype arguments
+        listenFor('#button-create', 'click', event => {
+            if (source.validity.valid) {
+                var urlList;
+                if (trackers.value) {
+                    urlList = [];
+                    trackers.value.split(/\s/).filter(value => !!value).
+                            forEach(url => urlList.push([url]));
+                    if (urlList.length) {
+                        prototype['announce-list'] = urlList;
+                        prototype['announce'] = urlList[0][0];
+                    }
+                }
+                if (webSeeds.value) {
+                    urlList = webSeeds.value.split(/\s/).filter(value => !!value);
+                    if (urlList.length)
+                        prototype['url-list'] = urlList;
+                }
+                if (comment.value)
+                    prototype['comment'] = comment.value;
+                if (creationDate.value) {
+                    var date = Date.parse(creationDate.value) / 1000;
+                    if (!isNaN(date))
+                        prototype['creation date'] = date;
+                }
+                if (createdBy.value)
+                    prototype['created by'] = createdBy.value;
+                if (pieceLength.value) {
+                    var num = pieceLength.value.match(/\d*/)[0];
+                    if (num) {
+                        if (/mb/i.test(pieceLength.value))
+                            prototype['info']['piece length'] = num * 1024*1024;
+                        else if (/kb/i.test(pieceLength.value))
+                            prototype['info']['piece length'] = num * 1024;
+                        else prototype['info']['piece length'] = num;
+                    }
+                }
+                if (name.value)
+                    prototype['info']['name'] = name.value;
+                if (privateOpt.checked)
+                    prototype['info']['private'] = 1;
+                create(source.value, prototype, savePath);
+            } else {
+                notify('Error', 'You must enter a valid source URL');
+                source.focus();
+            }
+            event.preventDefault();
+            event.stopImmediatePropagation();
+        });
+
+        listenFor('#button-save-as', 'click', event => {
+            saveAs(name.value || source.value);
+            event.preventDefault();
+            event.stopImmediatePropagation();
+        });
+
+    });
 });
+
