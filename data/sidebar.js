@@ -8,11 +8,12 @@
 const notify = (title, text) => addon.port.emit('alert', title, text);
 const getType = fileURL => addon.port.emit('get-type', fileURL);
 const getPrototype = () => addon.port.emit('get-prototype');
+const setPrototype = prototype => addon.port.emit('set-prototype', prototype);
 const selectSource = mode => addon.port.emit('select-source', mode);
 const saveAs = (url) => addon.port.emit('save-as', url);
 const create = (source, prototype, path) =>
         addon.port.emit('create', source, prototype, path);
-const recieve = (...args) => addon.port.on.apply(addon.port, args);
+const receive = (...args) => addon.port.on.apply(addon.port, args);
 const listenFor = (selector, event, handler, capture) =>
         document.querySelector(selector).addEventListener(event, handler, capture);
 
@@ -23,7 +24,7 @@ const getDate = (date) => {
                      date.getFullYear() + ' ';
     var hours = date.getHours(), suffix = 'AM';
     if (hours > 12) {
-        hour -= 12;
+        hours -= 12;
         suffix = 'PM'
     }
     dateString += hours + ':' +
@@ -57,11 +58,11 @@ window.addEventListener('load', event => {
     singleMode.addEventListener('click', event => multiMode.checked = false);
 
     // Port on fileURL result of nsIFilePicker
-    recieve('source', fileURL => source.value = fileURL);
-    recieve('path', path => savePath = path);
+    receive('source', fileURL => source.value = fileURL);
+    receive('path', path => savePath = path);
 
     // Port on result of get-type
-    recieve('type', isDirectory => {
+    receive('type', isDirectory => {
         singleMode.checked = !isDirectory;
         multiMode.checked = isDirectory;
     });
@@ -148,6 +149,7 @@ window.addEventListener('load', event => {
     const createdBy = getOption('created-by');
     const creationDate = getOption('creation-date');
     const pieceLength = getOption('piece-length');
+    const saveDefaults = document.querySelector('#save-defaults');
     
     // Prevent links and images from being dragged.
     colToArr(document.querySelectorAll('img, a')).forEach(element =>
@@ -157,7 +159,7 @@ window.addEventListener('load', event => {
             }));
 
     getPrototype();
-    recieve('prototype', prototype => {
+    receive('prototype', prototype => {
 
         // Apply defaults
         comment.value = prototype['comment'] || '';
@@ -166,6 +168,9 @@ window.addEventListener('load', event => {
         privateOpt.checked = !!prototype['info']['private'];
         createdBy.value = prototype['created by'] || '';
         creationDate.value = getDate(prototype['creation date'] * 1000);
+
+        listenFor('#save-defaults', 'click', event =>
+                alert('Note', 'Your settings will be saved after successful torrent creation.'));
 
         // On click emit the create event to main with the source and prototype arguments
         listenFor('#button-create', 'click', event => {
@@ -209,6 +214,8 @@ window.addEventListener('load', event => {
                 if (privateOpt.checked)
                     prototype['info']['private'] = 1;
                 create(source.value, prototype, savePath);
+                if (saveDefaults.checked)
+                    setPrototype(prototype);
             } else {
                 notify('Error', 'You must enter a valid source URL');
                 source.focus();
