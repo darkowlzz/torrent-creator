@@ -34,7 +34,6 @@ window.addEventListener('load', event => {
     receive('path', (path, leafName) => {
         savePath = path;
         fileName = leafName;
-        console.debug(savePath, fileName);
     });
 
     // Port on result of get-type
@@ -67,17 +66,16 @@ window.addEventListener('load', event => {
             notify('Note', 'Your settings will be saved after successful torrent creation.')
     });
     
-    // Prevent links and images from being dragged and links from click navigation(redirection)
-    listen('img, a', 'mousedown', blockEvent);
-    listen('a', 'click', blockEvent);
+    // Prevent links and images from being dragged
+    listen('img, a', 'mousedown', blockEvent, true);
 
     getPrototype();
     receive('prototype', prototype => {
 
         // Apply defaults
         comment.value = prototype['comment'] || '';
-        name.value = prototype['name'] || '';
-        pieceLength.value = prototype['piece length'] || '';
+        name.value = prototype['info']['name'] || '';
+        pieceLength.value = prototype['info']['piece length'] || '';
         privateOpt.checked = !!prototype['info']['private'];
         createdBy.value = prototype['created by'] || '';
         creationDate.value = getDate(prototype['creation date'] * 1000);
@@ -95,20 +93,28 @@ window.addEventListener('load', event => {
                         prototype['announce'] = urlList[0][0];
                     }
                 }
+                else {
+                    delete prototype['announce-list'];
+                    delete prototype['announce'];
+                }
                 if (webSeeds.value) {
                     urlList = webSeeds.value.split(/\s/).filter(value => !!value);
                     if (urlList.length)
                         prototype['url-list'] = urlList;
                 }
+                else delete prototype['url-list'];
                 if (comment.value)
                     prototype['comment'] = comment.value;
+                else delete prototype['comment'];
                 if (creationDate.value) {
                     var date = Date.parse(creationDate.value) / 1000;
                     if (!isNaN(date))
                         prototype['creation date'] = date;
                 }
+                else delete prototype['creation date'];
                 if (createdBy.value)
                     prototype['created by'] = createdBy.value;
+                else delete prototype['created by'];
                 if (pieceLength.value) {
                     var num = pieceLength.value.match(/\d*/)[0];
                     if (num) {
@@ -123,6 +129,7 @@ window.addEventListener('load', event => {
                     prototype['info']['name'] = name.value;
                 if (privateOpt.checked)
                     prototype['info']['private'] = 1;
+                else delete prototype['info']['private'];
                 create(source.value, prototype, savePath, fileName || 'Not implemented...');
                 if (saveDefaults.checked)
                     setPrototype(prototype);
@@ -134,6 +141,9 @@ window.addEventListener('load', event => {
 
         listen('#button-save-as', 'click', event =>
                 saveAs(name.value || source.value));
+
+        // Prevent links from click navigation(redirection)
+        listen('a', 'click', blockEvent);
 
     });
 });
