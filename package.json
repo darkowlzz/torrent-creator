@@ -2,7 +2,7 @@
     "license": "MPL 2.0",
     "version": "1.0",
     "description": "Torrent creation module for FireBit that can be packaged and ran as a separate extension.",
-    "contributors": [],
+    "contributors": ["Sunny (darkowlzz) <indiasuny000@gmail.com>"],
     "keywords": [ "torrentcreator", "torrent", "creator", "firebit", "torrent-creator"],
     "author": "Rodney Teal <rodneyd.teal@gmail.com",
     "homepage": "https://github.com/DecipherCode/torrent-creator",

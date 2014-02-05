@@ -1,0 +1,20 @@
+.downloadItem {
+  margin: 10px;
+  border: 1px solid black;
+  padding: 5px;
+}
+
+.title {
+  color: red;
+}
+
+.progressdiv {
+  background: red;
+  height: 15px;
+}
+
+.progressbar {
+  background: blue;
+  height: 15px;
+  width: 0%;
+}
