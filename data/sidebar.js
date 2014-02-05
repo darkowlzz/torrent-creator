@@ -169,8 +169,10 @@ window.addEventListener('load', event => {
         createdBy.value = prototype['created by'] || '';
         creationDate.value = getDate(prototype['creation date'] * 1000);
 
-        listenFor('#save-defaults', 'click', event =>
-                alert('Note', 'Your settings will be saved after successful torrent creation.'));
+        listenFor('#save-defaults', 'click', event => {
+                if (saveDefaults.checked)
+                    notify('Note', 'Your settings will be saved after successful torrent creation.')
+        });
 
         // On click emit the create event to main with the source and prototype arguments
         listenFor('#button-create', 'click', event => {
