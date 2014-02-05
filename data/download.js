@@ -86,11 +86,7 @@ self.port.on("create", function(id, fileName) {
 });
 
 // Listen to item progress signal and update item progress.
-self.port.on("progress", function(id, progress) {
+self.port.on("progress", function(id, status, statusArg, progress, progressMax) {
   items[id].updateProgress(progress);
-});
-
-// Listen to item progressMax update signal and update item progressMax.
-self.port.on("progressMax", function(id, progressMax) {
   items[id].updateProgressMax(progressMax);
 });
