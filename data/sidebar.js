@@ -130,7 +130,7 @@ window.addEventListener('load', event => {
                 if (privateOpt.checked)
                     prototype['info']['private'] = 1;
                 else delete prototype['info']['private'];
-                create(source.value, prototype, savePath, fileName || 'Not implemented...');
+                create(source.value, prototype, savePath, fileName);
                 if (saveDefaults.checked)
                     setPrototype(prototype);
             } else {
