@@ -93,4 +93,4 @@ self.port.on("progress", function(id, progress) {
 // Listen to item progressMax update signal and update item progressMax.
 self.port.on("progressMax", function(id, progressMax) {
   items[id].updateProgressMax(progressMax);
-}
+});
