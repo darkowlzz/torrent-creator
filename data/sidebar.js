@@ -38,7 +38,7 @@ window.addEventListener('load', event => {
     // Select source on click.
     const source = document.querySelector('#source > input');
     source.addEventListener('focus', event => source.select());
-    var savePath = '';
+    var savePath = '', fileName = '';
     // Drag and drop source
     window.addEventListener('dragenter', event => event.preventDefault());
     window.addEventListener('dragover', event => event.preventDefault());
@@ -59,7 +59,11 @@ window.addEventListener('load', event => {
 
     // Port on fileURL result of nsIFilePicker
     receive('source', fileURL => source.value = fileURL);
-    receive('path', path => savePath = path);
+    receive('path', (path, leafName) => {
+        savePath = path;
+        fileName = leafName;
+        console.debug(savePath, fileName);
+    });
 
     // Port on result of get-type
     receive('type', isDirectory => {
@@ -215,7 +219,7 @@ window.addEventListener('load', event => {
                     prototype['info']['name'] = name.value;
                 if (privateOpt.checked)
                     prototype['info']['private'] = 1;
-                create(source.value, prototype, savePath);
+                create(source.value, prototype, savePath, fileName || 'Not implemented...');
                 if (saveDefaults.checked)
                     setPrototype(prototype);
             } else {
