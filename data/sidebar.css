@@ -40,11 +40,27 @@ form {
     cursor: pointer !important;
 }
 
-fieldset {
+.fieldset-container {
     width: 25% !important;
-    padding: 3px !important;
 }
-textarea { border: none !important; overflow: hidden !important; }
+.fieldset-background {
+    position: absolute !important;
+    width: 175px !important;
+    height: 100px !important;
+    opacity: 0.2 !important;
+    z-index: -10 !important; 
+    background: url(images/link%2064.png) no-repeat scroll 55px 21px !important;
+}
+fieldset {
+    width: 100% !important;
+    padding: 3px !important;
+    background: none !important; 
+}
+
+textarea { 
+    border: none !important;
+    overflow: hidden !important;
+    background: none !important; }
 
 .checkbox {display: inline !important;}
 
