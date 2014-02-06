@@ -68,10 +68,15 @@ window.addEventListener('load', event => {
     listen('#source > img', 'click', event => selectSource(multiMode.checked));
 
     // Text areas
+
+    const resetPos = event => {
+        event.target.setSelectionRange(0, 0);
+        event.target.scrollLeft = event.target.scrollTop = 0;
+    };
     const trackers = document.querySelector('#trackers > textarea');
-    listen(trackers, 'blur', event => trackers.scrollLeft = trackers.scrollTop = 0);
     const webSeeds = document.querySelector('#web-seeds > textarea');
-    listen(webSeeds, 'blur', event => webSeeds.scrollLeft = webSeeds.scrollTop = 0);
+    listen(webSeeds, 'blur', resetPos);
+    listen(trackers, 'blur', resetPos);
 
     // Setup event listeners
     const comment = getOption('comment');
