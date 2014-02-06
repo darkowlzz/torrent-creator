@@ -11,6 +11,24 @@ window.addEventListener('load', event => {
     source.addEventListener('focus', event => source.select());
     // Globals
     var savePath = '', fileName = '';
+    // Set initial button state / Change on valid source
+    const createButton = document.querySelector('#button-create');
+    createButton.setAttribute('class', 'button-disabled');
+    const saveAsButton = document.querySelector('#button-save-as');
+    saveAsButton.setAttribute('class', 'button-disabled');
+    // Enable buttons if source is valid.
+    const toggleButtons = event => {
+        if (source.validity.valid) {
+            createButton.setAttribute('class', 'button-enabled');
+            saveAsButton.setAttribute('class', 'button-enabled');
+        }
+        else {
+            createButton.setAttribute('class', 'button-disabled');
+            saveAsButton.setAttribute('class', 'button-disabled');
+        }
+    };
+    listen(source, 'input', toggleButtons);
+    listen(source, 'change', toggleButtons);
     // Drag and drop source
     listen(window, 'dragenter', event => event.preventDefault());
     listen(window, 'dragover', event => event.preventDefault());
@@ -18,6 +36,7 @@ window.addEventListener('load', event => {
     listen(window, 'drop', event => {
         var value = event.dataTransfer.getData('text/x-moz-url');
         getType(source.value = value.split('\n')[0]);
+        toggleButtons();
     });
 
     // Single or multiple file torrent mode selection
@@ -30,7 +49,10 @@ window.addEventListener('load', event => {
     listen(singleMode, 'click', event => multiMode.checked = false);
 
     // Port on fileURL result of nsIFilePicker
-    receive('source', fileURL => source.value = fileURL);
+    receive('source', fileURL => { 
+        source.value = fileURL
+        toggleButtons();
+    });
     receive('path', (path, leafName) => {
         savePath = path;
         fileName = leafName;
@@ -81,7 +103,7 @@ window.addEventListener('load', event => {
         creationDate.value = getDate(prototype['creation date'] * 1000);
 
         // On click emit the create event to main with the source and prototype arguments
-        listen('#button-create', 'click', event => {
+        listen(createButton, 'click', event => {
             if (source.validity.valid) {
                 var urlList;
                 if (trackers.value) {
@@ -139,8 +161,10 @@ window.addEventListener('load', event => {
             }
         });
 
-        listen('#button-save-as', 'click', event =>
-                saveAs(name.value || source.value));
+        listen(saveAsButton, 'click', event => {
+            if (source.validity.valid)
+                saveAs(name.value || source.value);
+        });
 
         // Prevent links from click navigation(redirection)
         listen('a', 'click', blockEvent);
